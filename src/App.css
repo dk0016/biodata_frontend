@@ -1,0 +1,19 @@
+.cardheight {
+  width: 50%;
+  /* margin-top: 100px; */
+}
+.buttonwidth{
+  width: 30%;
+}
+.tableHeight{
+  background-color: rgb(243, 243, 205);
+}
+@media only screen and (max-width: 400px) {
+  .cardheight {
+    width: 80%;
+    height: 100%;
+  }
+  .buttonwidth{
+    width: 80%;
+  }
+}
