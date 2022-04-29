@@ -2,16 +2,44 @@ import axios from "axios";
 const serverUrl = "http://localhost:9000";
 const service = {
   addBiodata(body) {
-    return axios.post(`${serverUrl}/crud/crud`, body);
+    const token = localStorage.getItem("token");
+    return axios.post(`${serverUrl}/crud/crud`, body, {
+      headers: {
+        "x-access-token": token,
+      },
+    });
   },
   editBiodata(body, id) {
-    return axios.put(`${serverUrl}/crud/crud/${id}`, body);
+    const token = localStorage.getItem("token");
+    return axios.put(`${serverUrl}/crud/crud/${id}`, body, {
+      headers: {
+        "x-access-token": token,
+      },
+    });
   },
   getBiodata() {
-    return axios.get(`${serverUrl}/crud/crud`);
+    const token = localStorage.getItem("token");
+    return axios.get(`${serverUrl}/crud/crud`, {
+      headers: {
+        "x-access-token": token,
+      },
+    });
   },
   deleteBiodata(id) {
-    return axios.delete(`${serverUrl}/crud/crud/${id}`);
+    const token = localStorage.getItem("token");
+    return axios.delete(`${serverUrl}/crud/crud/${id}`, {
+      headers: {
+        "x-access-token": token,
+      },
+    });
+  },
+  login(body) {
+    const token = localStorage.getItem("token");
+    return axios.post(`${serverUrl}/login`, body, {
+      headers: {
+        "x-access-token": token,
+      },
+    });
   },
 };
 export default service;
