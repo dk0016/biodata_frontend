@@ -1,11 +1,22 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import service from "../service";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
+import Tostification from "../helper/toast";
+
 const Login = () => {
   const navigate = useNavigate();
   const [loginMobile, setloginMobile] = useState("");
   const [loginEmail, setloginEmail] = useState("");
+  const myRef = useRef();
+  //If we remove the [] in useEffect it will runs the code in runtime
+
+  // useEffect(()=>{
+  //   myRef.current.toastSuccess("Success");
+  //   myRef.current.toastError("something went wrong")
+  //   myRef.current.toastWarning("warning")
+  // },[])
+
   const loginSubmit = (event) => {
     event.preventDefault();
     const bodyData = {
@@ -20,12 +31,13 @@ const Login = () => {
           localStorage.setItem("token", res.data.token);
           localStorage.setItem("user", JSON.stringify(res.data.user));
           navigate("/user_form");
+          myRef.current.toastSuccess("Login Successfully");
         })
         .catch((err) => {
-          console.log(err.message);
+          myRef.current.toastError("Invalid credentials");
         });
     } else {
-      alert("Email and Mobile Number cannot be empty");
+      myRef.current.toastError("Mobile & E-mail can't be empty");
     }
   };
   return (
@@ -66,6 +78,7 @@ const Login = () => {
               </button>
             </div>
           </form>
+          <Tostification ref={myRef}></Tostification>
         </div>
       </div>
     </div>

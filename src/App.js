@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./App.css";
 import service from "./service.js";
+import { useNavigate } from "react-router-dom";
+import Tostification from "./helper/toast";
 const data = {
   countries: [
     {
@@ -29,6 +31,8 @@ const data = {
 };
 
 function App() {
+  const navigate = useNavigate();
+  const toastRef = useRef();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -45,6 +49,11 @@ function App() {
   useEffect(() => {
     getTable();
   }, []);
+  const logoutClear = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/");
+  };
   const clearField = () => {
     setFormIndex("");
     setFormaction("");
@@ -61,9 +70,10 @@ function App() {
       .deleteBiodata(item.id)
       .then((res) => {
         getTable();
+        toastRef.current.toastSuccess("Data Deleted successfully");
       })
       .catch((err) => {
-        console.log(err);
+        toastRef.current.toastError(err.message);
       });
   };
 
@@ -85,7 +95,7 @@ function App() {
         setTable([...res.data]);
       })
       .catch((err) => {
-        console.log(err);
+        toastRef.current.toastError(err);
       });
   };
   const biodata_submit = (e) => {
@@ -103,6 +113,7 @@ function App() {
         console.log(res);
         getTable();
         clearField();
+        toastRef.current.toastSuccess("Data Edited successfully");
       });
     } else {
       // setTable([...table, bodyData]);
@@ -111,6 +122,7 @@ function App() {
         .then((res) => {
           getTable();
           clearField();
+          toastRef.current.toastSuccess("Data added successfully");
         })
         .catch((err) => {
           console.log(err);
@@ -120,9 +132,15 @@ function App() {
 
   return (
     <div>
+      <div className="d-flex justify-content-end me-4 mt-1">
+        <h4 onClick={logoutClear} style={{ cursor: "pointer" }}>
+          logout
+        </h4>
+      </div>
       <div className="d-flex justify-content-center mt-2">
         <h3>CRUD OPERATION {formaction}</h3>
       </div>
+
       <div className="d-flex justify-content-center maindiv">
         <div className="card shadow-lg p-3 mb-5 bg-body rounded cardheight">
           <form>
@@ -220,6 +238,7 @@ function App() {
               </button>
             </div>
           </form>
+          <Tostification ref={toastRef}></Tostification>
         </div>
       </div>
       <div className="container px-4">
