@@ -2,10 +2,10 @@
   width: 50%;
   /* margin-top: 100px; */
 }
-.buttonwidth{
+.buttonwidth {
   width: 30%;
 }
-.tableHeight{
+.tableHeight {
   background-color: rgb(243, 243, 205);
 }
 @media only screen and (max-width: 400px) {
@@ -13,11 +13,21 @@
     width: 80%;
     height: 100%;
   }
-  .buttonwidth{
+  .buttonwidth {
     width: 80%;
   }
 }
-.maindiv{
+.maindiv {
   display: flex;
   align-items: center;
+}
+.fontweight {
+  font-size: 30px;
+  font-weight: 350;
+}
+.changeColor {
+  color: red;
+}
+.changeColor:hover {
+  color: blue;
 }

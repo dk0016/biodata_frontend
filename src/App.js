@@ -3,6 +3,8 @@ import "./App.css";
 import service from "./service.js";
 import { useNavigate } from "react-router-dom";
 import Tostification from "./helper/toast";
+import { Modal, Button } from "react-bootstrap";
+import { BoxArrowLeft } from "react-bootstrap-icons";
 const data = {
   countries: [
     {
@@ -42,6 +44,9 @@ function App() {
   const [table, setTable] = useState([]);
   const [formaction, setFormaction] = useState("");
   const [formIndex, setFormIndex] = useState(1);
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   const availableState = data.countries.find((c) => c.name === selectedCountry);
   const availableCities = availableState?.states?.find(
     (s) => s.name === selectedState
@@ -86,6 +91,7 @@ function App() {
     setSelectedCountry(item.country);
     setSelectedState(item.state);
     setSelectedCity(item.city);
+    handleShow();
   };
   const getTable = () => {
     service
@@ -132,10 +138,49 @@ function App() {
 
   return (
     <div>
+      <>
+        <Modal
+          show={show}
+          onHide={handleClose}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header>
+            <Modal.Title>Confirmation Alert</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="d-flex justify-content-center">
+              <p className="fontweight">
+                Are you sure you want to Edit this data
+              </p>
+            </div>
+            <div className="d-flex justify-content-between">
+              <Button
+                variant="danger"
+                onClick={() => {
+                  handleClose();
+                  clearField();
+                }}
+              >
+                Cancel
+              </Button>
+              <Button variant="success" onClick={handleClose}>
+                Edit
+              </Button>
+            </div>
+          </Modal.Body>
+        </Modal>
+      </>
       <div className="d-flex justify-content-end me-4 mt-1">
-        <h4 onClick={logoutClear} style={{ cursor: "pointer" }}>
-          logout
-        </h4>
+        <BoxArrowLeft
+          fontSize="2.5rem"
+          className="changeColor"
+          onMouseOver={({ target }) => (target.style.svg = "blue")}
+          onMouseOut={({ target }) => (target.style.svg = "red")}
+          onClick={logoutClear}
+          style={{ cursor: "pointer" }}
+        />
       </div>
       <div className="d-flex justify-content-center mt-2">
         <h3>CRUD OPERATION {formaction}</h3>
@@ -149,7 +194,7 @@ function App() {
               <input
                 type="text"
                 className="form-control"
-                placeholder="Enter your name"
+                placeholder="Enter your mobile"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
